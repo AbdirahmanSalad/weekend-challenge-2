@@ -17,24 +17,35 @@ app.listen(port, ()=>{
 
 }); 
 
-app.post("/",(req,res) =>{
-    let x = parseInt(req.body.firstNumber);
-    let y = parseInt(req.body.secondNumber);
-    let r = req.body.currentOperator;
+app.post("/answer",(req,res) =>{
+    let x = parseInt(req.body.first);
+    let y = parseInt(req.body.second);
+    let r = req.body.operator;
+    console.log(x, y, r);;
 
-    console.log(x, y, r);
+    let solution = calculate(x, y, r);
 
-    let answer = calculate(x, y, r)
+    inputHistory.push(solution);
+    console.log(inputHistory);
 
-
-
-    res.send(answer);
+    //res.send(solution);
     res.sendStatus(200);
+
 });
+
+app.get("/answer",(req,res)=>{
+    console.log(inputHistory[0]);
+
+    res.send(inputHistory);
+    //res.sendStatus(200);
+    inputHistory.pop();
+})
+
+
 
 function calculate(x, y, r){
     let solution = 0;
-    if (r === '*'){
+	if (r === '*'){
         solution = (x * y);
     }
     if (r === '/') {
@@ -46,5 +57,6 @@ function calculate(x, y, r){
     if (r === '+') {
         solution = (x + y);
     }
+    
     return solution;
 }
