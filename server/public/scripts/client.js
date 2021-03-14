@@ -47,6 +47,8 @@ function equals() {
 
     $('#screen').val('');
     newProblem = 1;
+
+    launchEquation();
 }
 
 function clearScreen() {
@@ -62,7 +64,7 @@ function clearScreen() {
 function launchEquation() {
     $.ajax({
         type: "POST",
-        url: "/",
+        url: "/answer",
         data: {
             first: firstNumber,
             second: secondNumber,
@@ -77,7 +79,8 @@ function launchEquation() {
     })
     .then(function(response){
         console.log(response);
-        printAnswer(response);
+        //printAnswer(response);
+        getRequest();
 
     })
     .catch(function(err) {
@@ -87,8 +90,29 @@ function launchEquation() {
     });
 }
 
-function printAnswer(answer) {
-    $('#screen').val(answer);
-    $('#lastAnswer').empty();
-    $('#lastAnswer').append(answer);
+function printAnswer(response) {
+    console.log(response);
+
+    $('#screen').val(response);
+   // $('#lastAnswer').empty();
+   // $('#lastAnswer').append(answer);
+}
+
+function getRequest() {
+    console.log('hello');
+
+    $.ajax({
+        type: "GET",
+        url: "/answer",
+
+    })
+    .then(function(response) {
+        printAnswer(response[0]);
+
+    })
+    .catch(function(err) {
+        console.log(err);
+        alert('error');
+
+    });
 }
